@@ -19,7 +19,6 @@ const controllers = () => {
                 message: 'Id da empresa null ou vazio'
             };
         }
-        req.body.idempresa = empresaId;
         var ComandoSql = await readCommandSql.retornaStringSql('obterHorarios', 'horario');
         var result = await db.Query(ComandoSql, {
             idempresa: empresaId
@@ -39,8 +38,50 @@ const controllers = () => {
 
     };
 
+     const salvarHorarios = async (req) => {
+       
+    try {
+        let empresaId = Acesso.retornarCodigoTokenAcesso('idempresa', req);
+        if (!empresaId) {
+            return {
+                status: 'error',
+                message: 'Id da empresa null ou vazio'
+            };
+        }
+
+        var ComandoSqlRemove = await readCommandSql.retornaStringSql('removerHorarios', 'horario');
+        await db.Query(ComandoSqlRemove, {
+            idempresa: empresaId
+        });
+
+        var ComandoSql = await readCommandSql.retornaStringSql('salvarHorario', 'horario');
+        const sleep = m => new Promise(r => setTimeout(r, m));
+        await Promise.all(
+            req.body.map( async (horario) => {
+                horario.idempresa = empresaId;
+                await db.Query(ComandoSql, horario);
+                await sleep(400);
+            })
+        )
+
+        return{
+            status: 'success',
+            message: 'Horarios atualizados com sucesso!'
+        }
+    } catch (error) {
+        console.log('Erro ao salvar os horarios da empresa: ', error);
+        return{
+            status: 'error',
+            message: 'Erro ao salvar os horarios da empresa.'
+        }
+        
+    }
+
+    };
+
     return Object.create({
         obterHorarios,
+        salvarHorarios,
     });
 }
 

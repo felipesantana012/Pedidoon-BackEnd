@@ -10,4 +10,10 @@ module.exports = (server) => {
         res.send(200, result);
     });
 
+       server.post('/empresa/horario', Acesso.validarTokenAcesso, async (req, res) => {
+        const result = await controllerHorario.controllers().salvarHorarios(req);
+        res.send(200, result);
+    });
+    
+
 }
