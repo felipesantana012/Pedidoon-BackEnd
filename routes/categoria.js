@@ -22,4 +22,15 @@ module.exports = (server) => {
       res.send(200, result);
     },
   );
+
+  server.post(
+    '/categoria/remove',
+    Acesso.validarTokenAcesso,
+    async (req, res) => {
+      const result = await controllerCategoria
+        .controllers()
+        .removerCategoria(req);
+      res.send(200, result);
+    },
+  );
 };

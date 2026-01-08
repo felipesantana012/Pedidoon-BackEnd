@@ -7,6 +7,8 @@ from
     categoria
 WHERE 
     idempresa = @idempresa
+AND 
+    apagado = 0
 ORDER BY 
     -ordem DESC,
     idcategoria ASC
@@ -49,3 +51,26 @@ WHERE
 AND 
     idcategoria = @idcategoria
 --END#atualizarOrdenarCategoria#
+
+--INIT#obterPorId#
+SELECT
+    idcategoria,
+    nome,
+    icone,
+    ordem
+FROM
+    categoria
+WHERE 
+    idcategoria = @idcategoria
+AND
+    apagado = 0
+--END#obterPorId#
+
+--INIT#removerPorId#
+UPDATE 
+    categoria
+SET
+    apagado = 1
+WHERE 
+    idcategoria = @idcategoria
+--END#removerPorId#

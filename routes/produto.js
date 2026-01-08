@@ -12,4 +12,36 @@ module.exports = (server) => {
       res.send(200, result);
     },
   );
+
+  server.post('/produto', Acesso.validarTokenAcesso, async (req, res) => {
+    const result = await controllerProduto.controllers().salvarDados(req);
+    res.send(200, result);
+  });
+
+  server.post(
+    '/produto/ordenar',
+    Acesso.validarTokenAcesso,
+    async (req, res) => {
+      const result = await controllerProduto.controllers().ordenarProdutos(req);
+      res.send(200, result);
+    },
+  );
+
+  server.post(
+    '/produto/remove',
+    Acesso.validarTokenAcesso,
+    async (req, res) => {
+      const result = await controllerProduto.controllers().removerProduto(req);
+      res.send(200, result);
+    },
+  );
+
+  server.post(
+    '/produto/duplicar',
+    Acesso.validarTokenAcesso,
+    async (req, res) => {
+      const result = await controllerProduto.controllers().duplicarProduto(req);
+      res.send(200, result);
+    },
+  );
 };

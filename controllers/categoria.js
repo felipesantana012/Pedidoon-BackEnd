@@ -6,6 +6,7 @@ const ReadCommandSql = require('../common/readCommandSql');
 const readCommandSql = new ReadCommandSql();
 
 const Acesso = require('../common/protecaoAcesso.js');
+const imagemController = require('../controllers/imagem.js');
 
 const controllers = () => {
   const listarTodas = async (req) => {
@@ -87,10 +88,63 @@ const controllers = () => {
     }
   };
 
+  const removerCategoria = async (req) => {
+    try {
+      const { idcategoria } = req.body;
+
+      // 1. PRIMEIRO: Obtemos a lista de produtos desta categoria
+      // (Isso deve ser feito enquanto eles ainda não estão marcados como apagados)
+      const ComandoSqlSelectProdutos = await readCommandSql.retornaStringSql(
+        'obterPorCategoriaIdSemOrdenacao',
+        'produto',
+      );
+      const produtos_categoria = await db.Query(ComandoSqlSelectProdutos, {
+        idcategoria: idcategoria,
+      });
+
+      // 2. SEGUNDO: Removemos as imagens físicas de cada produto
+      // Usamos um loop for...of ou Promise.all antes de apagar do banco
+      const promisesImagens = produtos_categoria.map(async (elem) => {
+        if (elem.imagem && elem.imagem !== 'null') {
+          const requisicao = {
+            body: { idproduto: elem.idproduto },
+          };
+          return imagemController
+            .controllers()
+            .removerImagemProduto(requisicao);
+        }
+      });
+      await Promise.all(promisesImagens);
+
+      // 3. TERCEIRO: Agora que os arquivos sumiram, apagamos os produtos no Banco
+      const ComandoSqlRemoveProdutos = await readCommandSql.retornaStringSql(
+        'removePorCategoriaId',
+        'produto',
+      );
+      await db.Query(ComandoSqlRemoveProdutos, { idcategoria: idcategoria });
+
+      // 4. QUARTO: Por fim, removemos a categoria
+      const ComandoSqlRemoveCategoria = await readCommandSql.retornaStringSql(
+        'removerPorId',
+        'categoria',
+      );
+      await db.Query(ComandoSqlRemoveCategoria, { idcategoria: idcategoria });
+
+      return {
+        status: 'success',
+        message: 'Categoria e produtos removidos com sucesso.',
+      };
+    } catch (error) {
+      console.error('Erro na operação de categoria: ', error);
+      return { status: 'error', message: 'Falha ao remover categoria.' };
+    }
+  };
+
   return {
     listarTodas,
     salvarDados,
     ordenarCategorias,
+    removerCategoria,
   };
 };
 
