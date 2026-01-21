@@ -9,6 +9,21 @@ const Acesso = require('../common/protecaoAcesso.js');
 const controllerImagem = require('../controllers/imagem.js');
 
 const controllers = () => {
+  const obterProdutos = async (req) => {
+    try {
+      const ComandoSql = await readCommandSql.retornaStringSql(
+        'obterProdutos',
+        'produto',
+      );
+      const result = await db.Query(ComandoSql);
+
+      return { status: 'success', data: result };
+    } catch (error) {
+      console.log('Erro ao obter os produtos: ', error);
+      return { status: 'error', message: 'Falha ao obter os produtos.' };
+    }
+  };
+
   const obterProdutosCategoria = async (req) => {
     try {
       let { id } = req.params;
@@ -164,6 +179,7 @@ const controllers = () => {
   };
 
   return {
+    obterProdutos,
     obterProdutosCategoria,
     ordenarProdutos,
     salvarDados,

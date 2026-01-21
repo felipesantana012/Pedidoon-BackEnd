@@ -9,14 +9,14 @@ SELECT
 from 
     horario
 WHERE 
-    idempresa = @idempresa;
+    idempresa = 1;
 --END#obterHorarios#
 
 --INIT#removerHorarios#
 DELETE FROM 
     horario
 WHERE 
-    idempresa = @idempresa;
+    idempresa = 1;
 --END#removerHorarios#
 
 --INIT#salvarHorario#

@@ -2,6 +2,11 @@ const controllerProduto = require('../controllers/produto.js');
 const Acesso = require('../common/protecaoAcesso.js');
 
 module.exports = (server) => {
+  server.get('/produto', async (req, res) => {
+    const result = await controllerProduto.controllers().obterProdutos(req);
+    res.send(200, result);
+  });
+
   server.get(
     '/produto/categoria/:id',
     Acesso.validarTokenAcesso,

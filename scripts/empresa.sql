@@ -1,3 +1,11 @@
+--INIT#obterDados#
+SELECT 
+    nome,
+    logotipo
+from empresa;
+--END#obterDados#
+
+
 --INIT#obterDadosCompletos#
 SELECT 
     nome,

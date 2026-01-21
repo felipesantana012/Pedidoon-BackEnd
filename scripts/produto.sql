@@ -1,3 +1,17 @@
+--INIT#obterProdutos#
+SELECT
+ *
+FROM
+	produto AS p
+WHERE
+	p.ativo = 1
+AND
+    p.apagado = 0
+ORDER BY
+	-p.ordem DESC, p.idproduto ASC
+--END#obterProdutos#
+
+
 --INIT#obterProdutosCategoria#
 SELECT
     p.idproduto,

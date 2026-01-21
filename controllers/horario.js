@@ -1,4 +1,3 @@
-require('dotenv').config();
 const AcessoDados = require('../db/acessodados');
 const db = new AcessoDados();
 
@@ -15,7 +14,7 @@ const controllers = () => {
         'horario',
       );
       var result = await db.Query(ComandoSql, {
-        idempresa: process.env.ID_EMPRESA,
+        idempresa: 1,
       });
       return {
         status: 'success',
