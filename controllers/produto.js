@@ -24,6 +24,22 @@ const controllers = () => {
     }
   };
 
+  const obterProdutoPorId = async (req) => {
+    try {
+      let id = req.params.idproduto;
+      const ComandoSql = await readCommandSql.retornaStringSql(
+        'obterProdutoPorId',
+        'produto',
+      );
+      const result = await db.Query(ComandoSql, { idproduto: id });
+
+      return { status: 'success', data: result };
+    } catch (error) {
+      console.log('Erro ao obter os produtos: ', error);
+      return { status: 'error', message: 'Falha ao obter o produto.' };
+    }
+  };
+
   const obterProdutosCategoria = async (req) => {
     try {
       let { id } = req.params;
@@ -180,6 +196,7 @@ const controllers = () => {
 
   return {
     obterProdutos,
+    obterProdutoPorId,
     obterProdutosCategoria,
     ordenarProdutos,
     salvarDados,

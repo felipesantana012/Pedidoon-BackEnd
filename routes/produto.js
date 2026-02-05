@@ -7,6 +7,11 @@ module.exports = (server) => {
     res.send(200, result);
   });
 
+  server.get('/produto/:idproduto', async (req, res) => {
+    const result = await controllerProduto.controllers().obterProdutoPorId(req);
+    res.send(200, result);
+  });
+
   server.get(
     '/produto/categoria/:id',
     Acesso.validarTokenAcesso,

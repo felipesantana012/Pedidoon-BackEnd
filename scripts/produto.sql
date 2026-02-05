@@ -11,6 +11,24 @@ ORDER BY
 	-p.ordem DESC, p.idproduto ASC
 --END#obterProdutos#
 
+--INIT#obterProdutoPorId#
+SELECT
+    p.idproduto,
+    P.idcategoria,
+    p.nome,
+    p.descricao,
+    p.valor,
+    p.imagem
+FROM
+    produto AS p
+WHERE
+    p.idproduto = @idproduto
+AND
+    p.ativo = 1
+AND
+    p.apagado = 0
+--END#obterProdutoPorId#
+
 
 --INIT#obterProdutosCategoria#
 SELECT
