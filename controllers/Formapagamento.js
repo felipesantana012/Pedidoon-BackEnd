@@ -7,6 +7,24 @@ const readCommandSql = new ReadCommandSql();
 const Acesso = require('../common/protecaoAcesso.js');
 
 const controllers = () => {
+  const obterFormapagamentoAtiva = async (req) => {
+    try {
+      const ComandoSql = await readCommandSql.retornaStringSql(
+        'obterFormapagamentoAtiva',
+        'formapagamento',
+      );
+      const result = await db.Query(ComandoSql);
+
+      return { status: 'success', data: result };
+    } catch (error) {
+      console.log('Erro ao obter as Formas de pagamento ativas: ', error);
+      return {
+        status: 'error',
+        message: 'Falha ao obter as Formas de pagamento ativas.',
+      };
+    }
+  };
+
   const obterFormapagamento = async (req) => {
     try {
       const ComandoSql = await readCommandSql.retornaStringSql(
@@ -51,6 +69,7 @@ const controllers = () => {
   };
 
   return {
+    obterFormapagamentoAtiva,
     obterFormapagamento,
     salvarFormaPagamento,
   };

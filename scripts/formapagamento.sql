@@ -1,3 +1,14 @@
+--INIT#obterFormapagamentoAtiva#
+SELECT
+   idformapagamento,
+   nome
+from 
+    formapagamento
+WHERE
+    ativo = 1
+--END#obterFormapagamentoAtiva#
+
+
 --INIT#obterFormapagamento#
 SELECT
    *
